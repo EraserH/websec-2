@@ -47,6 +47,10 @@ async function Main() {
     style: selected,
   });
 
+  selectClick.on('select', function (e) {
+    alert(e);
+  });
+
   /*const changeInteraction = function () {
     if (select !== null) {
       map.removeInteraction(select);
