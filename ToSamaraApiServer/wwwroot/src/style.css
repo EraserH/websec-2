@@ -5,26 +5,41 @@ body {
   margin: 0;
   height: 100%;
   font-family: "Lato", sans-serif;
-  background-color:bisque;
+  background-color:rgb(182, 174, 131);
 }
 
 #map {
   position: absolute;
   top: 0;
-  left: 3%;
-  width: 97%;
+  left: 0;
+  width: 100%;
   height: 100%;
 }
 
-#search {
-  width: 70%;
-  height: 120%;
+.ol-zoom {
+  left: unset;
+  right: 8px;
 }
 
-/*.leftpanel {
-  background-color: red;
-  border-color:aqua;
-}*/
+#search {
+  width: 80%;
+  height: 100%;
+  
+  padding-left: 3%;
+  border: 2px solid blue;
+  background: #F9F0DA;
+  outline: none;
+}
+
+#search_button{
+  color: blueviolet;
+  width: 42px;
+  height: 42px;
+}
+
+#search_button:hover{
+  color: rgb(95, 85, 151);
+}
 
 .sidenav {
   height: 100%;
@@ -33,23 +48,36 @@ body {
   z-index: 1;
   top: 0;
   left: 0;
-  background-color:darksalmon;
+  background-color:rgb(226, 192, 172);
   overflow-x: hidden;
   transition: 0.5s;
   padding-top: 60px;
+}
+
+.sidenav div {
+  padding: 3px 3px 3px 10px;
+  text-decoration: none;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav #mainTitle {
+  margin-left: 20%;
+  margin-right: 20%;
+  color:#665e5e;
 }
 
 .sidenav a {
   padding: 8px 8px 8px 32px;
   text-decoration: none;
   font-size: 25px;
-  color: #818181;
+  color: #665e5e;
   display: block;
   transition: 0.3s;
 }
 
 .sidenav a:hover {
-  color: #f1f1f1;
+  color: #dae6e5;
 }
 
 .sidenav .closebtn {
@@ -60,60 +88,119 @@ body {
   margin-left: 50px;
 }
 
+.sidenav .headerSideNav {
+  color:#bb0d0d;
+  padding: 3px 3px 3px 3px;
+  font-size: 23px;
+  margin-top: 15px;
+  margin-left: 30%;
+}
+
+.sidenav #SideBarStop{
+  margin-bottom:20%;
+}
+
+.sidenav .stopRouteLink {
+  color:rgba(74, 73, 88, 0.836);
+  padding: 3px 3px 3px 3px;
+  font-size: 20px;
+  margin-top: 10px;
+  border: 1px solid rgba(74, 73, 88, 0.836);
+}
+
+a.stopRouteLink:hover {
+  color:rgba(138, 9, 131, 0.836);
+  background-color: rgb(216, 214, 214);
+  padding: 3px 3px 3px 3px;
+  font-size: 21px;
+}
+
+.notFound{
+  color:crimson;
+  background-color: antiquewhite;
+  padding: 3px 3px 3px 3px;
+  margin-left: 10%;
+  margin-right: 15%;
+}
+
 .sidenav .stopAdded {
   color:crimson;
-  padding: 3px 3px 3px 3px;
-  font-size: 15px;
-}
-
-.ol-popup {
-  position: absolute;
   background-color: white;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-  padding: 15px;
-  border-radius: 10px;
-  border: 1px solid #cccccc;
-  bottom: 12px;
-  left: -50px;
-  min-width: 280px;
-}
-.ol-popup:after, .ol-popup:before {
-  top: 100%;
-  border: solid transparent;
-  content: " ";
-  height: 0;
-  width: 0;
-  position: absolute;
-  pointer-events: none;
-}
-.ol-popup:after {
-  border-top-color: white;
-  border-width: 10px;
-  left: 48px;
-  margin-left: -10px;
-}
-.ol-popup:before {
-  border-top-color: #cccccc;
-  border-width: 11px;
-  left: 48px;
-  margin-left: -11px;
-}
-.ol-popup-closer {
-  text-decoration: none;
-  position: absolute;
-  top: 2px;
-  right: 8px;
-}
-.ol-popup-closer:after {
-  content: "✖";
+  padding: 3px 3px 3px 3px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 15%;
 }
 
-@media screen and (max-height: 450px) {
+.sidenav .itemTitle {
+  color:rgb(231, 10, 55);
+  padding: 3px 3px 3px 3px;
+  font-size: 20px;
+  margin-top: 15px;
+  margin-left: 8%;
+}
+
+.sidenav .itemDirection {
+  color:rgb(97, 78, 150);
+  padding: 3px 3px 3px 3px;
+  font-size: 17px;
+  margin-top: 15px;
+  margin-left: 8%;
+}
+
+.sidenav .progItem {
+  background-color: rgb(211, 219, 219);
+  color:rgb(4, 51, 51);
+  font-size: 17px;
+  padding: 1px 1px 1px 1px;
+  border: 1px solid rgb(126, 113, 108);
+}
+
+.sidenav .scheduleItem{
+  background-color: rgb(211, 219, 219);
+  color:rgb(7, 85, 85);
+  font-size: 17px;
+  padding: 1px 1px 1px 1px;
+  border: 1px solid rgb(126, 113, 108);
+}
+
+.sidenav .scheduleItem .stopInSchedule{
+  margin-top: 15px;
+}
+
+.sidenav .icon {
+  margin-left: 15%;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+@media screen and (max-height: 450px) and (max-width: 500px) {
   .sidenav {
       padding-top: 15px;
   }
 
   .sidenav a {
       font-size: 18px;
+  }
+
+  .sidenav .stopRouteLink {
+    font-size: 11px;
+    margin-top: 5px;
+  }
+  
+  .sidenav .stopAdded {
+    font-size: 10px;
+  }
+
+  .sidenav .itemTitle {
+    font-size: 22px;
+  }
+  
+  .sidenav .itemDirection {
+    font-size: 20px;
+  }
+  
+  .sidenav .progItem {
+    font-size: 20px;
   }
 }

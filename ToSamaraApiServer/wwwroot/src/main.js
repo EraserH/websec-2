@@ -6,84 +6,46 @@ import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style';
 import { fromLonLat } from 'ol/proj';
 import { DataLoader } from './DataLoader';
 import GeoJSON from 'ol/format/GeoJSON';
-import { openNav, closeNav, SearchStop } from './onclickers.js';
-import Overlay from 'ol/Overlay';
-import {toLonLat} from 'ol/proj';
-import {toStringHDMS} from 'ol/coordinate';
+import { openNav, closeNav, SearchStop, showStop } from './onclickers.js';
+//import Overlay from 'ol/Overlay';
+//import {toLonLat} from 'ol/proj';
+//import {toStringHDMS} from 'ol/coordinate';
+
+import {Control, defaults as defaultControls} from 'ol/control';
 
 import Select from 'ol/interaction/Select';
 import { altKeyOnly, click, pointerMove } from 'ol/events/condition';
 
 
+class OpenSideNavControl extends Control {
+  /**
+   * @param {Object} [opt_options] Control options.
+   */
+  constructor(opt_options) {
+    const options = opt_options || {};
+
+    const button = document.createElement('button');
+    button.innerHTML = '&#9776';
+
+    const element = document.createElement('div');
+    element.className = 'open_sidenav ol-unselectable ol-control';
+    element.appendChild(button);
+
+    super({
+      element: element,
+      target: options.target,
+    });
+
+    button.addEventListener('click', openNav);
+  }
+}
+
 
 async function Main() {
   console.log('Перед картой');
 
-  //HTMLCanvasElement.getContext('2d', { willReadFrequently: true });
-
-  let search_elem = document.getElementById("search_button");
-  search_elem.onclick = SearchStop;
-
-  let open_elem = document.getElementById("open_button");
-  open_elem.onclick = openNav;
-
   let close_elem = document.getElementById("close_button");
   close_elem.onclick = closeNav;
-
-
-  //let select = null; // ref to currently selected interaction
-
-  const selected = new Style({
-    image: new CircleStyle({
-      radius: 5,
-      fill: null,
-      stroke: new Stroke({ color: 'red', width: 2 }),
-    }),
-    //stroke: new Stroke({
-    //color: 'rgba(255, 255, 255, 0.7)',
-    //width: 2,
-    //}),
-  });
-
-  const selectClick = new Select({
-    condition: click,
-    style: selected,
-  });
-
-  selectClick.on('select', function (e) {
-    alert(e.selected);
-    console.log(e.selected[0]);
-    //console.log(e.selected[0].values_);
-    console.log(e.selected[0].values_.KS_ID);
-    console.log(e.selected[0].values_.title);
-  });
-
-
-  const container = document.getElementById('popup');
-  const content = document.getElementById('popup-content');
-  const closer = document.getElementById('popup-closer');
-
-  /**
-   * Create an overlay to anchor the popup to the map.
-   */
-  const overlay = new Overlay({
-    element: container,
-    autoPan: {
-      animation: {
-        duration: 250,
-      },
-    },
-  });
-
-  /**
-   * Add a click handler to hide the popup.
-   * @return {boolean} Don't follow the href.
-   */
-  closer.onclick = function () {
-    overlay.setPosition(undefined);
-    closer.blur();
-    return false;
-  };
 
 
   let dataLoader = new DataLoader();
@@ -99,7 +61,9 @@ async function Main() {
     style: new Style({
       image: new CircleStyle({
         radius: 5,
-        fill: null,
+        fill: new Fill({
+          color: 'green',
+        }),
         stroke: new Stroke({ color: 'green', width: 2 }),
       }),
     }),
@@ -107,11 +71,11 @@ async function Main() {
 
   // трансформация координат
   const centerProj = fromLonLat([50.1584, 53.2077], "EPSG:3857");
-  console.log(centerProj);
 
   const map = new Map({
+    controls: defaultControls().extend([new OpenSideNavControl()]),
     target: 'map',
-    overlays: [overlay],
+    //overlays: [overlay],
     layers: [
       new TileLayer({
         source: new OSM()
@@ -119,47 +83,40 @@ async function Main() {
       vectorLayer,
     ],
     view: new View({
-      //center: [5923120.861975739, 6469410.50299372],
       center: centerProj,
       zoom: 12
     })
   });
 
+
+  const selected = new Style({
+    image: new CircleStyle({
+      radius: 5,
+      fill: new Fill({
+        color: 'red',
+      }),
+      stroke: new Stroke({ color: 'red', width: 2 }),
+    })
+  });
+
+  const selectClick = new Select({
+    condition: click,
+    style: selected,
+  });
+
+  selectClick.on('select', async function (e) {
+    await showStop(e.selected[0], dataLoader);
+    openNav();
+  });
+  
   map.addInteraction(selectClick);
 
-  map.on('singleclick', function (evt) {
-    const coordinate = evt.coordinate;
-    const hdms = toStringHDMS(toLonLat(coordinate));
-  
-    content.innerHTML = '<p>You clicked here:</p><code>' + hdms + '</code>';
-    overlay.setPosition(coordinate);
+  let search_elem = document.getElementById("search_button");
+  search_elem.addEventListener('click', async function(){
+    await SearchStop(selectClick, vectorSource, dataLoader, map);
   });
 
   console.log('После карты');
 }
 
 await Main();
-
-
-/*const changeInteraction = function () {
-    if (select !== null) {
-      map.removeInteraction(select);
-    }
-    else{
-      select = selectSingleClick;
-      map.addInteraction(select);
-      select.on('select', function (e) {
-        document.getElementById('status').innerHTML =
-          '&nbsp;' +
-          e.target.getFeatures().getLength() +
-          ' selected features (last operation selected ' +
-          e.selected.length +
-          ' and deselected ' +
-          e.deselected.length +
-          ' features)';
-      });
-    }
-  }*/
-
-  //selectElement.onchange = changeInteraction;
-  //changeInteraction();
