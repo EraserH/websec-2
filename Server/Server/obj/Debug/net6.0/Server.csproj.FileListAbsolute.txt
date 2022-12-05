@@ -29,3 +29,4 @@ D:\7 СЕМЕСТР\ВЕБ\TOSamaraWebAPI\Server\Server\obj\Debug\net6.0\refint\
 D:\7 СЕМЕСТР\ВЕБ\TOSamaraWebAPI\Server\Server\obj\Debug\net6.0\Server.pdb
 D:\7 СЕМЕСТР\ВЕБ\TOSamaraWebAPI\Server\Server\obj\Debug\net6.0\Server.genruntimeconfig.cache
 D:\7 СЕМЕСТР\ВЕБ\TOSamaraWebAPI\Server\Server\obj\Debug\net6.0\ref\Server.dll
+D:\7 СЕМЕСТР\ВЕБ\TOSamaraWebAPI\Server\Server\bin\Debug\net6.0\Server.staticwebassets.runtime.json
